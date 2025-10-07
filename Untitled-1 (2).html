@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factory Machine Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Style for the container of the factory layout image */
+        .factory-layout-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .factory-layout-container img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+        }
+        /* Style for clickable areas on the factory layout */
+        .machine-spot {
+            position: absolute;
+            background-color: rgba(29, 78, 216, 0.4);
+            border: 2px solid rgba(37, 99, 235, 0.7);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .machine-spot:hover {
+            background-color: rgba(37, 99, 235, 0.6);
+            border-color: rgba(29, 78, 216, 1);
+        }
+        
+        /* Styles for the modal that displays machine details */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            padding-top: 60px;
+        }
+        
+        .modal-content {
+            background-color: #ffffff;
+            margin: 5% auto;
+            padding: 24px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container for the factory layout image and clickable areas -->
+    <div id="factory-layout" class="factory-layout-container">
+        <!-- The factory layout image -->
+        <img src="https://storage.googleapis.com/gemini-prod-us-west1-d85813e3-0570/images/6ab8b3fd-c918-4c9f-b98a-751bd730f04d.jpg" alt="Factory Layout">
+
+        <!-- Clickable areas positioned over the machines in the image -->
+        <!-- Each div has a data-id attribute to identify the machine -->
+        <div class="machine-spot" style="top: 9.5%; left: 7%; width: 11%; height: 9%;" data-id="580"></div>
+        <div class="machine-spot" style="top: 21.5%; left: 7%; width: 11%; height: 9%;" data-id="580-2"></div>
+        <div class="machine-spot" style="top: 33.5%; left: 7%; width: 11%; height: 9%;" data-id="580-3"></div>
+        <div class="machine-spot" style="top: 49.5%; left: 7%; width: 11%; height: 9%;" data-id="580-4"></div>
+        <div class="machine-spot" style="top: 49.5%; left: 26%; width: 11%; height: 9%;" data-id="580-5"></div>
+        <div class="machine-spot" style="top: 49.5%; left: 45%; width: 11%; height: 9%;" data-id="580-6"></div>
+        <div class="machine-spot" style="top: 6.5%; left: 52%; width: 11%; height: 9%;" data-id="300-12"></div>
+        <div class="machine-spot" style="top: 18.5%; left: 52%; width: 11%; height: 9%;" data-id="300-4"></div>
+        <div class="machine-spot" style="top: 30.5%; left: 52%; width: 11%; height: 9%;" data-id="300-8"></div>
+        <div class="machine-spot" style="top: 63.5%; left: 7%; width: 11%; height: 9%;" data-id="300-5"></div>
+        <div class="machine-spot" style="top: 75.5%; left: 7%; width: 11%; height: 9%;" data-id="300-11"></div>
+        <div class="machine-spot" style="top: 87.5%; left: 7%; width: 11%; height: 9%;" data-id="300-7"></div>
+        <div class="machine-spot" style="top: 89.5%; left: 21%; width: 11%; height: 9%;" data-id="3000-2"></div>
+        <div class="machine-spot" style="top: 63.5%; left: 26%; width: 11%; height: 9%;" data-id="3000-4"></div>
+        <div class="machine-spot" style="top: 64.5%; left: 45%; width: 6%; height: 11%;" data-id="650-1"></div>
+        <div class="machine-spot" style="top: 77.5%; left: 45%; width: 6%; height: 11%;" data-id="650-2"></div>
+        <div class="machine-spot" style="top: 57.5%; left: 57%; width: 11%; height: 9%;" data-id="500-7"></div>
+        <div class="machine-spot" style="top: 69.5%; left: 57%; width: 11%; height: 9%;" data-id="300-3"></div>
+        <div class="machine-spot" style="top: 81.5%; left: 57%; width: 11%; height: 9%;" data-id="300-6"></div>
+    </div>
+
+    <!-- Modal for displaying machine details -->
+    <div id="machine-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title" class="text-2xl font-bold mb-4 text-gray-800"></h2>
+            <p id="modal-plc" class="text-lg text-gray-700 mb-4"></p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-semibold text-gray-600 mb-2">Machine Photo</h3>
+                    <img id="modal-machine-img" src="" alt="Machine Photo" class="w-full h-auto rounded-lg shadow-md">
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-600 mb-2">PLC Location</h3>
+                    <img id="modal-plc-img" src="" alt="PLC Photo" class="w-full h-auto rounded-lg shadow-md">
+                     <div class="mt-2">
+                        <input type="file" id="plc-photo-upload" class="hidden" accept="image/*">
+                        <button id="add-plc-photo-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-2 transition-colors">
+                            Add PLC Photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+             <div class="mt-4">
+                <h3 class="font-semibold text-gray-600 mb-2">Description</h3>
+                <p id="modal-description" class="text-gray-600"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for each machine, including its ID, name, PLC type, and image URLs
+        const machinesData = {
+            '580': { name: 'Machine 580', plc: 'Not specified', description: 'Main production machine in the north-west corner.' },
+            '580-2': { name: 'Machine 580 2', plc: 'MIT', description: 'Second machine in the 580 series, located near the main entrance.' },
+            '580-3': { name: 'Machine 580 3', plc: 'MIT', description: 'Third machine in the 580 series.' },
+            '580-4': { name: 'Machine 580 4', plc: 'MIT', description: 'Fourth machine in the 580 series, south of the main entrance.' },
+            '580-5': { name: 'Machine 580 5', plc: 'MIT', description: 'Fifth machine in the 580 series, centrally located.' },
+            '580-6': { name: 'Machine 580 6', plc: 'MIT', description: 'Sixth machine in the 580 series.' },
+            '300-12': { name: 'Machine 300 12', plc: 'S7200 ST40', description: 'Machine from the 300 series located near Exit 1.' },
+            '300-4': { name: 'Machine 300 4', plc: 'S7200 ST40', description: 'Another machine from the 300 series with an ST40 PLC.' },
+            '300-8': { name: 'Machine 300 8', plc: 'S7200 226cn', description: 'A 300 series machine utilizing a 226cn PLC module.' },
+            '300-5': { name: 'Machine 300 5', plc: 's7200 226cn', description: 'Located in the south-west section, part of the 300 series.' },
+            '300-11': { name: 'Machine 300 11', plc: 's7200 St40', description: 'Features an ST40 PLC, part of the 300 series.' },
+            '300-7': { name: 'Machine 300 7', plc: 's7200 226cn', description: 'The southernmost machine in the west wing.' },
+            '3000-2': { name: 'Machine 3000 2', plc: 'S700 226n', description: 'Part of the 3000 series, using an S700 PLC.' },
+            '3000-4': { name: 'Machine 3000 4', plc: 'S7200 226n', description: 'Advanced machine from the 3000 series.' },
+            '650-1': { name: 'Machine 650 1', plc: 'Not specified', description: 'First unit of the 650 series.' },
+            '650-2': { name: 'Machine 650 2', plc: 'Not specified', description: 'Second unit of the 650 series.' },
+            '500-7': { name: 'Machine 500 7', plc: 'S7200 St60', description: 'Machine from the 500 series with an ST60 PLC.' },
+            '300-3': { name: 'Machine 300 3', plc: 'S7200 226cn', description: 'Centrally located machine in the east wing.' },
+            '300-6': { name: 'Machine 300 6', plc: 'S7200 226cn', description: 'Located near the stock room, part of the 300 series.' }
+        };
+
+        // Get modal elements
+        const modal = document.getElementById('machine-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalPlc = document.getElementById('modal-plc');
+        const modalMachineImg = document.getElementById('modal-machine-img');
+        const modalPlcImg = document.getElementById('modal-plc-img');
+        const modalDescription = document.getElementById('modal-description');
+        const closeButton = document.querySelector('.close-button');
+        const addPlcPhotoBtn = document.getElementById('add-plc-photo-btn');
+        const plcPhotoUpload = document.getElementById('plc-photo-upload');
+
+        // Get all clickable machine spots
+        const machineSpots = document.querySelectorAll('.machine-spot');
+
+        // Add click event listener to each machine spot
+        machineSpots.forEach(spot => {
+            const machineId = spot.dataset.id;
+            const machineInfo = machinesData[machineId];
+            if (machineInfo) {
+                // Add the machine name to the spot on the map
+                spot.textContent = machineInfo.name.replace('Machine ', '');
+            }
+
+            spot.addEventListener('click', () => {
+                if (machineInfo) {
+                    // Populate modal with machine data
+                    modalTitle.textContent = machineInfo.name;
+                    modalPlc.innerHTML = `<span class="font-semibold">PLC Type:</span> ${machineInfo.plc}`;
+                    modalDescription.textContent = machineInfo.description;
+                    
+                    // Use placeholder images
+                    modalMachineImg.src = `https://placehold.co/400x300/e2e8f0/4a5568?text=Machine+${machineId}`;
+                    modalPlcImg.src = `https://placehold.co/400x300/dbeafe/1e3a8a?text=PLC+of+${machineId}`;
+                    
+                    // Display the modal
+                    modal.style.display = 'block';
+                }
+            });
+        });
+        
+        // Handle PLC photo upload
+        addPlcPhotoBtn.onclick = () => {
+            plcPhotoUpload.click();
+        };
+
+        plcPhotoUpload.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    modalPlcImg.src = e.target.result;
+                    // In a real application, you would upload the file to a server here.
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Function to close the modal
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Event listeners to close the modal
+        closeButton.addEventListener('click', closeModal);
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
+
